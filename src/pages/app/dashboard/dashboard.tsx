@@ -1,10 +1,11 @@
-import { DollarSign } from 'lucide-react'
 import { Helmet } from 'react-helmet-async'
 
 import { DaysOrdersAmountCards } from './days-order-amount'
 import { MonthCanceledOrdersAmountCard } from './month-canceled-orders-amount'
 import { MonthOrdersAmountCard } from './month-orders-amount-card'
 import { MonthRevenueCard } from './month-revenue-card'
+import { PopularProductsChart } from './popular-products-chart'
+import { RevenueChart } from './revenue-chart'
 
 export function Dashboard() {
   return (
@@ -17,6 +18,10 @@ export function Dashboard() {
           <MonthOrdersAmountCard />
           <DaysOrdersAmountCards />
           <MonthCanceledOrdersAmountCard />
+        </div>
+        <div className="grid grid-cols-9 gap-4 ">
+          <RevenueChart />
+          <PopularProductsChart />
         </div>
       </div>
     </>
