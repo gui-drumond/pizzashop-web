@@ -39,3 +39,11 @@ An app for order management and sales statistics.
    or
 
    npm run dev 
+
+4. Need clone backEnd in Bun.js and Run
+   ```bash
+   docker compose up -d
+
+5. Run app Bun.js
+   ```bash
+   bun run dev
