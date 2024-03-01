@@ -33,7 +33,7 @@ export async function getOrders({
       pageIndex,
       orderId,
       customerName,
-      status,
+      status: status === 'all' ? null : status,
     },
   })
 
