@@ -27,30 +27,34 @@ export function OrderTableRow({ order }: OrderTableProps) {
   const [isDetaisOpen, setIsDetailsOpen] = useState(false)
   const queryClient = useQueryClient()
 
+  function updateOrderStatusOnCache(orderId: string, status: OrderStatus) {
+    const ordersListCached = queryClient.getQueriesData<GetOrdersResponse>({
+      queryKey: ['orders'],
+    })
+
+    ordersListCached.forEach(([cacheKey, cacheData]) => {
+      if (!cacheData) {
+        return
+      }
+      queryClient.setQueryData<GetOrdersResponse>(cacheKey, {
+        ...cacheData,
+        orders: cacheData.orders.map((order) => {
+          if (order.orderId === orderId) {
+            return {
+              ...order,
+              status,
+            }
+          }
+          return order
+        }),
+      })
+    })
+  }
+
   const { mutateAsync: cancelOrderFn } = useMutation({
     mutationFn: CancelOrder,
     onSuccess: (_, { orderId }) => {
-      const ordersListCached = queryClient.getQueriesData<GetOrdersResponse>({
-        queryKey: ['orders'],
-      })
-
-      ordersListCached.forEach(([cacheKey, cacheData]) => {
-        if (!cacheData) {
-          return
-        }
-        queryClient.setQueryData<GetOrdersResponse>(cacheKey, {
-          ...cacheData,
-          orders: cacheData.orders.map((order) => {
-            if (order.orderId === orderId) {
-              return {
-                ...order,
-                status: 'cancelled',
-              }
-            }
-            return order
-          }),
-        })
-      })
+      updateOrderStatusOnCache(orderId, 'cancelled')
     },
   })
   return (
